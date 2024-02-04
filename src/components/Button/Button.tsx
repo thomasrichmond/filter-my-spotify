@@ -1,4 +1,5 @@
 "use client";
+
 import { IButtonProps } from "./Button.types";
 
 const Button = ({ label, link, click, type }: IButtonProps) => {
