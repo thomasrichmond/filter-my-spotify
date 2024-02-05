@@ -15,7 +15,9 @@ export default function Home({}: any) {
   return (
     <div>
       {isUserAuthenticated ? (
-        <User />
+        <Suspense fallback={<h1>Loading user...</h1>}>
+          <User />
+        </Suspense>
       ) : (
         <Button
           label="Login"
