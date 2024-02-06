@@ -4,7 +4,6 @@ import { ITotalSongsProps } from ".";
 const TotalSongs = async ({ songPayload }: ITotalSongsProps) => {
   const totalSongs = await getAllSavedSongs();
 
-  console.log(totalSongs);
   const data = totalSongs.map((song: any, songIndex: number) => {
     return (
       <ul key={`saved-songs-${songIndex}`}>
