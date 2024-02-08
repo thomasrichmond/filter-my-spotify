@@ -1,8 +1,8 @@
 import { getAllSavedSongs, getTotalSavedSongs } from "@/app/utils/user-data";
 import { ITotalSongsProps } from ".";
 
-const TotalSongs = async ({ songPayload }: ITotalSongsProps) => {
-  const totalSongs = await getAllSavedSongs();
+const TotalSongs = async ({ songPayload, refreshToken }: ITotalSongsProps) => {
+  const totalSongs = await getAllSavedSongs(refreshToken);
 
   const data = totalSongs.map((song: any, songIndex: number) => {
     return (

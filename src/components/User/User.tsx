@@ -10,29 +10,30 @@ import {
 import SavedSongs from "../SavedSongs";
 import { Suspense } from "react";
 import TotalSongs from "../TotalSongs";
-import { getRefreshToken } from "@/app/utils/authorise-user";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+import { cookies } from "next/headers";
 
 const User = async ({}: IUserProps) => {
   let accountDetails = await getUserInformation();
   let savedSongs = await getSavedSongs();
   let topSongs = await getTopSongs();
   let requestSuccess = true;
-
-  // const totalSongList = await getAllSavedSongs();
+  const cookieStore = cookies();
+  let refreshedAccess = undefined;
+  const refresh = cookieStore.get("r")?.value;
 
   //* Refresh token logic so user can stay signed into app
   if (savedSongs === 401 || topSongs === 401) {
     requestSuccess = false;
-    const refresh = await getRefreshToken();
 
-    if (refresh) {
-      requestSuccess = true;
-      // revalidatePath("/");
-      // TODO confirm if the redirect triggers the re-redner correctly
-      redirect("/");
-    }
+    const res = await fetch(`http://localhost:3000/api/refresh?r=${refresh}`);
+    const resData = await res.json();
+
+    requestSuccess = resData.requestSuccess;
+    refreshedAccess = resData.token;
+
+    accountDetails = await getUserInformation(refreshedAccess);
+    savedSongs = await getSavedSongs(undefined, refreshedAccess);
+    topSongs = await getTopSongs(undefined, refreshedAccess);
   }
 
   return (
@@ -48,7 +49,7 @@ const User = async ({}: IUserProps) => {
             <SavedSongs songPayload={savedSongs} />
           </Suspense>
           <Suspense fallback={<h1>Loading total songs...</h1>}>
-            <TotalSongs />
+            <TotalSongs refreshToken={refreshedAccess} />
           </Suspense>
         </>
       )}

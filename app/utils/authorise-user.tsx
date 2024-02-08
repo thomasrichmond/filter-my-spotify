@@ -1,13 +1,6 @@
 "use server";
-import axios from "axios";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
-import { getAccessToken } from "../api/_auth";
-import { access } from "fs";
 
-const cookie = cookies();
-const authToken = cookie.get("t")?.value;
-const refreshToken = cookie.get("r")?.value;
+import { redirect } from "next/navigation";
 
 export default async function RequestLogin() {
   const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;

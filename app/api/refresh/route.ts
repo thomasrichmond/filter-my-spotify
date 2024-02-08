@@ -2,6 +2,7 @@ import axios from 'axios';
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 
+
 export async function GET(request: NextRequest) {
   const refreshToken = request.nextUrl.searchParams.get('r') ?? null
   const url = "https://accounts.spotify.com/api/token";
@@ -12,6 +13,7 @@ export async function GET(request: NextRequest) {
     "base64"
   );
   let access = '';
+  let refresh = ''
 
 
   const body = {
@@ -31,14 +33,29 @@ export async function GET(request: NextRequest) {
       refreshSuccess = true;
       console.log(res.data)
       access = res.data.access_token
+      refresh = res.data.refresh_token
     })
     .catch((err) => {
       console.log(err?.response?.data);
     });
 
-  let response = NextResponse.json(refreshSuccess, { status: 200 })
-  response.cookies.set("cook", access!, { httpOnly: true });
-  response.cookies.set("t", access!, { httpOnly: true });
 
-  return response
+  let response = NextResponse.json({
+    requestSuccess: true,
+    token: access,
+  }, { status: 200 })
+
+  // response.cookies.set("t", access!, { httpOnly: true });
+
+  // return response
+
+  return new Response(JSON.stringify({
+    requestSuccess: true,
+    token: access
+  }), {
+    status: 200,
+    headers: {
+      'Set-Cookie': [`t=${access}`, `r=${refresh}`].join('; ')
+    }
+  })
 }
