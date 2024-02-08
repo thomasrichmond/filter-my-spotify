@@ -1,4 +1,6 @@
+import { deleteCookies } from '@/app/utils/authorise-user';
 import axios from 'axios';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
 
@@ -40,14 +42,7 @@ export async function GET(request: NextRequest) {
     });
 
 
-  let response = NextResponse.json({
-    requestSuccess: true,
-    token: access,
-  }, { status: 200 })
-
-  // response.cookies.set("t", access!, { httpOnly: true });
-
-  // return response
+  await deleteCookies();
 
   return new Response(JSON.stringify({
     requestSuccess: true,
