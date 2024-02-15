@@ -4,6 +4,7 @@ import { ISavedSongsProps } from "./SavedSongs.types";
 import { Suspense, useEffect, useState } from "react";
 import axios from "axios";
 import Button from "../Button/Button";
+import Card from "../Card/Card";
 
 const SavedSongs = ({ songPayload }: ISavedSongsProps) => {
   const [userData, setUserData] = useState<any>(songPayload.items);
@@ -33,18 +34,19 @@ const SavedSongs = ({ songPayload }: ISavedSongsProps) => {
 
   const data = userData.map((song: any, songIndex: number) => {
     return (
-      <ul key={`saved-songs-${songIndex}`}>
-        <li>Track name: {song.track.name}</li>
-        <li> Artist: {song.track.artists[0].name}</li>
-        <li>Image: {song.track.album.images[0].url}</li>
-      </ul>
+      <Card
+        key={`song-card-${songIndex}`}
+        title={song.track.name}
+        description={song.track.artists[0].name}
+        imageUrl={song.track.album.images[0].url}
+      />
     );
   });
 
   return (
     <div>
       <h1>User data: </h1>
-      {data}
+      <div className="grid grid-cols-4 gap-3">{data}</div>
       <Button
         type="button"
         label={isDataLoading ? "Loading..." : "View more"}
