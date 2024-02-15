@@ -3,9 +3,10 @@ import Button from "../src/components/Button";
 import { CookiesProvider } from "next-client-cookies/server";
 import axios from "axios";
 import { redirect, useRouter, useSearchParams } from "next/navigation";
-import RequestLogin from "./utils/authorise-user";
+
 import { cookies } from "next/headers";
 import { Suspense } from "react";
+import { RequestLogin } from "./utils/authorise-user";
 
 export default function Home({}: any) {
   const cookieStore = cookies();
@@ -19,13 +20,9 @@ export default function Home({}: any) {
           <User />
         </Suspense>
       ) : (
-        <Button
-          label="Login"
-          click={async () => {
-            "use server";
-            RequestLogin();
-          }}
-        />
+        <>
+          <Button label="Login" click={RequestLogin} />
+        </>
       )}
     </div>
   );
