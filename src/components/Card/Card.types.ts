@@ -4,5 +4,5 @@ export interface ICardProps {
   imageUrl: string;
   description: string;
   callToActionLabel?: string;
-
+  genre?: string
 }
