@@ -34,14 +34,9 @@ const User = async ({}: IUserProps) => {
     requestSuccess = resData.requestSuccess;
     refreshedAccess = resData.accessToken;
 
-    //TODO More testing to ensure this is not needed, then removing and refactoring.
-    // accountDetails = await getUserInformation(refreshedAccess);
-    // savedSongs = await getSavedSongs(undefined, refreshedAccess);
-    // topSongs = await getTopSongs(undefined, refreshedAccess);
-
-    accountDetails = await getUserInformation();
-    savedSongs = await getSavedSongs();
-    topSongs = await getTopSongs();
+    accountDetails = await getUserInformation(refreshedAccess);
+    savedSongs = await getSavedSongs(undefined, refreshedAccess);
+    topSongs = await getTopSongs(undefined, refreshedAccess);
   }
 
   return (
