@@ -11,6 +11,7 @@ export async function GET(request: NextRequest) {
   const cookie = cookies();
   const authToken = cookie.get("t")?.value;
   const skipParam = request.url.split('=')[1];
+  let combinedData: any;
 
   await axios
     .get(`https://api.spotify.com/v1/me/tracks?limit=50&offset=${skipParam}`, {
@@ -18,14 +19,37 @@ export async function GET(request: NextRequest) {
         Authorization: `Bearer ${authToken}`,
       },
     })
-    .then((res) => {
-      savedSongs = res.data;
+    .then(async (res) => {
+      let combinedRes: any = [];
+      savedSongs = res.data.items;
+
+      //TODO Extract into re-usable function
+      const genrePromise = savedSongs.map(async (song: any) => {
+
+        await axios.get(`https://api.spotify.com/v1/artists/${song.track.album.artists[0].id}`, {
+          headers: {
+            Authorization: `Bearer ${authToken}`,
+          },
+        }).then((res) => {
+          const targetObject = {
+            genre: res.data.genres[0]
+          }
+
+          const combinedObj = Object.assign(targetObject, song)
+          combinedRes.push(combinedObj)
+        })
+      })
+
+      await Promise.all(genrePromise).then(() => {
+        combinedData = JSON.stringify(combinedRes)
+      })
+
+
     })
     .catch((err) => {
       console.log(":::ERROR TRACKS:::", err?.response?.data);
       return err?.response?.data;
     });
 
-  return NextResponse.json(savedSongs, { status: 200 })
-
+  return NextResponse.json(combinedData, { status: 200 })
 }
