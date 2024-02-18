@@ -1,3 +1,4 @@
+"use server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -16,4 +17,9 @@ export async function RequestLogin() {
 export async function deleteCookies() {
   cookies().delete("t");
   cookies().delete("r");
+}
+
+export async function setRefreshCookies(authToken?: string) {
+  cookies().delete("t");
+  cookies().set("t", `${authToken}`, { httpOnly: true });
 }

@@ -15,8 +15,6 @@ export async function GET(request: NextRequest) {
     "base64"
   );
   let access = '';
-  let refresh = ''
-
 
   const body = {
     grant_type: "refresh_token",
@@ -35,22 +33,15 @@ export async function GET(request: NextRequest) {
       refreshSuccess = true;
       console.log(res.data)
       access = res.data.access_token
-      refresh = res.data.refresh_token
     })
     .catch((err) => {
       console.log(err?.response?.data);
     });
 
 
-  await deleteCookies();
-
-  return new Response(JSON.stringify({
+  return Response.json({
     requestSuccess: true,
-    token: access
-  }), {
-    status: 200,
-    headers: {
-      'Set-Cookie': [`t=${access}`, `r=${refresh}`].join('; ')
-    }
-  })
+    accessToken: access,
+  }, { status: 200 })
+
 }

@@ -6,6 +6,7 @@ import {
   getTopSongs,
   getTotalSavedSongs,
   getUserInformation,
+  setRandomCookies,
 } from "@/app/utils/user-data";
 import SavedSongs from "../SavedSongs";
 import { Suspense } from "react";
@@ -20,20 +21,27 @@ const User = async ({}: IUserProps) => {
   const cookieStore = cookies();
   let refreshedAccess = undefined;
   const refresh = cookieStore.get("r")?.value;
+  let tokenHasError = false;
 
   //* Refresh token logic so user can stay signed into app
   if (savedSongs === 401 || topSongs === 401) {
+    tokenHasError = true;
     requestSuccess = false;
 
     const res = await fetch(`http://localhost:3000/api/refresh?r=${refresh}`);
     const resData = await res.json();
 
     requestSuccess = resData.requestSuccess;
-    refreshedAccess = resData.token;
+    refreshedAccess = resData.accessToken;
 
-    accountDetails = await getUserInformation(refreshedAccess);
-    savedSongs = await getSavedSongs(undefined, refreshedAccess);
-    topSongs = await getTopSongs(undefined, refreshedAccess);
+    //TODO More testing to ensure this is not needed, then removing and refactoring.
+    // accountDetails = await getUserInformation(refreshedAccess);
+    // savedSongs = await getSavedSongs(undefined, refreshedAccess);
+    // topSongs = await getTopSongs(undefined, refreshedAccess);
+
+    accountDetails = await getUserInformation();
+    savedSongs = await getSavedSongs();
+    topSongs = await getTopSongs();
   }
 
   return (
@@ -46,11 +54,15 @@ const User = async ({}: IUserProps) => {
             songs
           </h3>
           <Suspense fallback={<h1>Loading...</h1>}>
-            <SavedSongs songPayload={savedSongs} />
+            <SavedSongs
+              songPayload={savedSongs}
+              refreshToken={refreshedAccess}
+              tokenHasError={tokenHasError}
+            />
           </Suspense>
-          <Suspense fallback={<h1>Loading total songs...</h1>}>
+          {/* <Suspense fallback={<h1>Loading total songs...</h1>}>
             <TotalSongs refreshToken={refreshedAccess} />
-          </Suspense>
+          </Suspense> */}
         </>
       )}
     </div>

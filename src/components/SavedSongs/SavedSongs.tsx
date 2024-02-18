@@ -5,8 +5,13 @@ import { Suspense, useEffect, useState } from "react";
 import axios from "axios";
 import Button from "../Button/Button";
 import Card from "../Card/Card";
+import { setRefreshCookies } from "@/app/utils/authorise-user";
 
-const SavedSongs = ({ songPayload }: ISavedSongsProps) => {
+const SavedSongs = ({
+  songPayload,
+  refreshToken,
+  tokenHasError,
+}: ISavedSongsProps) => {
   const [userData, setUserData] = useState<any>(songPayload.items);
   const [viewMoreCount, setViewMoreCount] = useState(1);
   const [isDataLoading, setIsDataLoading] = useState(false);
@@ -31,6 +36,12 @@ const SavedSongs = ({ songPayload }: ISavedSongsProps) => {
         return err;
       });
   };
+
+  useEffect(() => {
+    if (tokenHasError) {
+      setRefreshCookies(refreshToken);
+    }
+  }, []);
 
   const data = userData.map((song: any, songIndex: number) => {
     return (
