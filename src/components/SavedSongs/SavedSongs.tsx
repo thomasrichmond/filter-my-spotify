@@ -24,7 +24,7 @@ const SavedSongs = ({
       .get(`api/saved-songs?skip=${skipIndex}`)
       .then((res) => {
         let resArray: any = [];
-        res.data.items.forEach((song: any, index: number) => {
+        JSON.parse(res.data).forEach((song: any, index: number) => {
           resArray.push(song);
         });
         setUserData(userData.concat(resArray));
@@ -50,6 +50,7 @@ const SavedSongs = ({
         title={song.track.name}
         description={song.track.artists[0].name}
         imageUrl={song.track.album.images[0].url}
+        genre={song.genre}
       />
     );
   });
