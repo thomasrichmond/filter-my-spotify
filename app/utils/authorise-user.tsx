@@ -14,11 +14,6 @@ export async function RequestLogin() {
   redirect(`${url}?${params}`);
 }
 
-export async function deleteCookies() {
-  cookies().delete("t");
-  cookies().delete("r");
-}
-
 export async function setRefreshCookies(authToken?: string) {
   cookies().delete("t");
   cookies().set("t", `${authToken}`, { httpOnly: true });
