@@ -24,6 +24,8 @@ export async function GET(request: NextRequest) {
       savedSongs = res.data.items;
 
       //TODO Extract into re-usable function
+      // TODO Extract token access function to be used here also.
+      //TODO Investigate
       const genrePromise = savedSongs.map(async (song: any) => {
 
         await axios.get(`https://api.spotify.com/v1/artists/${song.track.album.artists[0].id}`, {

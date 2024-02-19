@@ -37,6 +37,7 @@ const SavedSongs = ({
       });
   };
 
+  //* Refreshing cookies by calling in CSR component
   useEffect(() => {
     if (tokenHasError) {
       setRefreshCookies(refreshToken);
