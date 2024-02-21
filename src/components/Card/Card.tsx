@@ -14,7 +14,8 @@ const Card = ({
       <Image src={imageUrl} alt={title} width={240} height={200} />
       <h2>{title}</h2>
       <p>{description}</p>
-      <p>{genre}</p>
+      {/* Removing genre until rate limit issue is solved */}
+      {/* <p>{genre}</p> */}
       {callToActionLabel && <Button label={callToActionLabel} />}
     </div>
   );
