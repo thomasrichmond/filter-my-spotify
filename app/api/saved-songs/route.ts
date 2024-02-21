@@ -20,31 +20,28 @@ export async function GET(request: NextRequest) {
       },
     })
     .then(async (res) => {
-      let combinedRes: any = [];
+
       savedSongs = res.data.items;
+      //* Commented as it rates limits far too quickly, and spotify genre seeds are awful.
+      // const genrePromise = savedSongs.map(async (song: any) => {
 
-      //TODO Extract into re-usable function
-      // TODO Extract token access function to be used here also.
-      //TODO Investigate
-      const genrePromise = savedSongs.map(async (song: any) => {
+      //   await axios.get(`https://api.spotify.com/v1/artists/${song.track.album.artists[0].id}`, {
+      //     headers: {
+      //       Authorization: `Bearer ${authToken}`,
+      //     },
+      //   }).then((res) => {
+      //     const targetObject = {
+      //       genre: res.data.genres[0]
+      //     }
 
-        await axios.get(`https://api.spotify.com/v1/artists/${song.track.album.artists[0].id}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }).then((res) => {
-          const targetObject = {
-            genre: res.data.genres[0]
-          }
+      //     const combinedObj = Object.assign(targetObject, song)
+      //     combinedRes.push(combinedObj)
+      //   })
+      // })
 
-          const combinedObj = Object.assign(targetObject, song)
-          combinedRes.push(combinedObj)
-        })
-      })
-
-      await Promise.all(genrePromise).then(() => {
-        combinedData = JSON.stringify(combinedRes)
-      })
+      // await Promise.all(genrePromise).then(() => {
+      //   combinedData = JSON.stringify(combinedRes)
+      // })
 
 
     })
@@ -53,5 +50,5 @@ export async function GET(request: NextRequest) {
       return err?.response?.data;
     });
 
-  return NextResponse.json(combinedData, { status: 200 })
+  return NextResponse.json(savedSongs, { status: 200 })
 }
