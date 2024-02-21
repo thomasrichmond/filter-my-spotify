@@ -31,7 +31,6 @@ export async function GET(request: NextRequest) {
     })
     .then((res: any) => {
       refreshSuccess = true;
-      console.log(res.data)
       access = res.data.access_token
     })
     .catch((err) => {
