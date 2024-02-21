@@ -1,9 +1,5 @@
-import { deleteCookies } from '@/app/utils/authorise-user';
 import axios from 'axios';
-import { cookies } from 'next/headers';
-import { NextResponse } from 'next/server';
 import { NextRequest } from 'next/server';
-
 
 export async function GET(request: NextRequest) {
   const refreshToken = request.nextUrl.searchParams.get('r') ?? null
