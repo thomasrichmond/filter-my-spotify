@@ -22,6 +22,7 @@ export async function GET(request: NextRequest) {
     .then(async (res) => {
 
       savedSongs = res.data.items;
+
       //* Commented as it rates limits far too quickly, and spotify genre seeds are awful.
       // const genrePromise = savedSongs.map(async (song: any) => {
 
@@ -49,6 +50,7 @@ export async function GET(request: NextRequest) {
       console.log(":::ERROR TRACKS:::", err?.response?.data);
       return err?.response?.data;
     });
+
 
   return NextResponse.json(savedSongs, { status: 200 })
 }
