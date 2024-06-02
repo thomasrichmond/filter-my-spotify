@@ -1,12 +1,8 @@
-import axios from "axios";
 import { IUserProps } from "./User.types";
 import {
-  getAllSavedSongs,
   getSavedSongs,
   getTopSongs,
-  getTotalSavedSongs,
   getUserInformation,
-  setRandomCookies,
 } from "@/app/utils/user-data";
 import SavedSongs from "../SavedSongs";
 import { Suspense } from "react";
@@ -55,9 +51,6 @@ const User = async ({}: IUserProps) => {
               tokenHasError={tokenHasError}
             />
           </Suspense>
-          {/* <Suspense fallback={<h1>Loading total songs...</h1>}>
-            <TotalSongs refreshToken={refreshedAccess} />
-          </Suspense> */}
         </>
       )}
     </div>

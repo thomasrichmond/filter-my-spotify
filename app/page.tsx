@@ -20,9 +20,7 @@ export default function Home({}: any) {
           <User />
         </Suspense>
       ) : (
-        <>
-          <Button label="Login" click={RequestLogin} />
-        </>
+        <Button label="Login" click={RequestLogin} />
       )}
     </div>
   );
